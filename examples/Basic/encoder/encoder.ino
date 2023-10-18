@@ -2,8 +2,8 @@
  * @file encoder.ino
  * @author SeanKwok (shaoxiang@m5stack.com)
  * @brief M5Dial Encoder Test
- * @version 0.1
- * @date 2023-09-26
+ * @version 0.2
+ * @date 2023-10-18
  *
  *
  * @Hardwares: M5Dial
@@ -27,6 +27,7 @@ void setup() {
 long oldPosition = -999;
 
 void loop() {
+    M5Dial.update();
     long newPosition = M5Dial.Encoder.read();
     if (newPosition != oldPosition) {
         M5Dial.Speaker.tone(8000, 20);
@@ -36,5 +37,11 @@ void loop() {
         M5Dial.Display.drawString(String(newPosition),
                                   M5Dial.Display.width() / 2,
                                   M5Dial.Display.height() / 2);
+    }
+    if (M5Dial.BtnA.wasPressed()) {
+        M5Dial.Encoder.readAndReset();
+    }
+    if (M5Dial.BtnA.pressedFor(5000)) {
+        M5Dial.Encoder.write(100);
     }
 }

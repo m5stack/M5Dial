@@ -2,8 +2,8 @@
  * @file rfid.ino
  * @author SeanKwok (shaoxiang@m5stack.com)
  * @brief M5Dial RFID Test
- * @version 0.1
- * @date 2023-09-26
+ * @version 0.2
+ * @date 2023-10-18
  *
  *
  * @Hardwares: M5Dial
@@ -28,9 +28,23 @@ void setup() {
 }
 
 void loop() {
-    if (M5Dial.Rfid.PICC_IsNewCardPresent() ||
+    if (M5Dial.Rfid.PICC_IsNewCardPresent() &&
         M5Dial.Rfid.PICC_ReadCardSerial()) {
         M5Dial.Display.clear();
+
+        Serial.print(F("PICC type: "));
+        uint8_t piccType = M5Dial.Rfid.PICC_GetType(M5Dial.Rfid.uid.sak);
+        Serial.println(M5Dial.Rfid.PICC_GetTypeName(piccType));
+
+        // Check is the PICC of Classic MIFARE type
+        if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
+            piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
+            piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
+            Serial.println(F("Your tag is not of type MIFARE Classic."));
+            M5Dial.Display.drawString("not support", M5Dial.Display.width() / 2,
+                                      M5Dial.Display.height() / 2);
+            return;
+        }
         String uid = "";
         for (byte i = 0; i < M5Dial.Rfid.uid.size;
              i++) {  // Output the stored UID data.  将存储的UID数据输出
@@ -38,11 +52,15 @@ void loop() {
             uid += String(M5Dial.Rfid.uid.uidByte[i], HEX);
         }
         M5Dial.Speaker.tone(8000, 20);
-        M5Dial.Display.drawString("card uid:", M5Dial.Display.width() / 2,
-                                  M5Dial.Display.height() / 2 - 20);
+        M5Dial.Display.drawString(M5Dial.Rfid.PICC_GetTypeName(piccType),
+                                  M5Dial.Display.width() / 2,
+                                  M5Dial.Display.height() / 2 - 30);
+
+        M5Dial.Display.drawString("card id:", M5Dial.Display.width() / 2,
+                                  M5Dial.Display.height() / 2);
 
         M5Dial.Display.drawString(uid, M5Dial.Display.width() / 2,
-                                  M5Dial.Display.height() / 2 + 20);
+                                  M5Dial.Display.height() / 2 + 30);
         Serial.println();
     }
 }
