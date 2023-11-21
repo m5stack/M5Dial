@@ -395,7 +395,7 @@ uint8_t MFRC522::PCD_CommunicateWithPICC(	uint8_t command,		///< The command to 
 										uint8_t rxAlign,		///< In: Defines the bit position in backData[0] for the first bit received. Default 0.
 										bool checkCRC		///< In: True => The last two bytes of the response is assumed to be a CRC_A that must be validated.
 									 ) {
-	uint8_t n, _validBits;
+	uint8_t n, _validBits = 0;
 	unsigned int i;
 
 	// Prepare values for BitFramingReg
