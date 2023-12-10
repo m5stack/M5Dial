@@ -13,5 +13,9 @@
   "version": "1.0.2",
   "frameworks": ["arduino"],
   "platforms": ["espressif32", "native"],
-  "headers": "M5Dial.h"
+  "headers": "M5Dial.h",
+  "dependencies": {
+    "M5Unified": "*",
+    "M5GFX": "*"
+  }
 }
