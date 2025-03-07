@@ -11,13 +11,12 @@
 
 namespace m5 {
 class M5_DIAL {
-   private:
+private:
     /* data */
 
-   public:
+public:
     void begin(bool enableEncoder = false, bool enableRFID = false);
-    void begin(m5::M5Unified::config_t cfg, bool enableEncoder = false,
-               bool enableRFID = false);
+    void begin(m5::M5Unified::config_t cfg, bool enableEncoder = false, bool enableRFID = false);
 
     M5GFX &Display         = M5.Display;
     M5GFX &Lcd             = Display;
@@ -25,7 +24,7 @@ class M5_DIAL {
     Power_Class &Power     = M5.Power;
     RTC8563_Class &Rtc     = M5.Rtc;
     Speaker_Class &Speaker = M5.Speaker;
-    Button_Class &BtnA     = M5.BtnA;
+    Button_Class &BtnA     = M5.getButton(0);
 
     /// for internal I2C device
     I2C_Class &In_I2C = m5::In_I2C;
